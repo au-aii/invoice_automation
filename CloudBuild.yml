@@ -1,0 +1,15 @@
+steps:
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        gcloud functions deploy process_pdf_invoice \
+          --gen2 \
+          --region=asia-northeast1 \
+          --runtime=python311 \
+          --entry-point=on_file_finalized \
+          --trigger-event-filters="type=google.cloud.storage.object.v1.finalized" \
+          --trigger-event-filters="bucket=htb-energy-contact-center-invoice-input" \
+          --set-env-vars="PROJECT_ID=htbwebsite-chatbot-462005,LOCATION=us,PROCESSOR_ID=96c81f9b471498ae,OUTPUT_BUCKET=htb-energy-contact-center-invoice-output" \
+          --service-account=docai-function-sa@htbwebsite-chatbot-462005.iam.gserviceaccount.com
